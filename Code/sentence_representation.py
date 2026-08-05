@@ -11,10 +11,10 @@ def sentence_representation(tokenized_text):
 
 def graph(similarity_matrix, threshold=0.1):
     output = nx.Graph()
-    
     for i in range(len(similarity_matrix)):
-        for j in range(len(similarity_matrix)):
-            if i != j and similarity_matrix[i][j] > threshold:
+        output.add_node(i)
+    for i in range(len(similarity_matrix)):
+        for j in range(i+1,len(similarity_matrix)):
+            if similarity_matrix[i][j] > threshold:
                 output.add_edge(i, j, weight=similarity_matrix[i][j])
     return output
-    
