@@ -8,3 +8,54 @@ def label_sentences(sentences, summary):
         score = scorer.score(summary, sent)["rouge1"].fmeasure
         labels.append(1 if score > 0.2 else 0)
     return labels
+
+
+def oracle_label_sentences(sentences,summary,max_sentences=5,min_improvement=0.001):
+
+    labels = [0] * len(sentences)
+
+    selected_indices = []
+    current_summary = ""
+    current_score = 0.0
+
+    for _ in range(max_sentences):
+
+        best_index = None
+        best_score = current_score
+
+        for i, sentence in enumerate(sentences):
+
+            if i in selected_indices:
+                continue
+
+        
+            if current_summary:
+                candidate_summary = (
+                    current_summary + " " + sentence)
+            else:
+                candidate_summary = sentence
+
+    
+            score = scorer.score(summary, candidate_summary)["rouge1"].fmeasure
+
+    
+            if score > best_score + min_improvement:
+                best_score = score
+                best_index = i
+
+   
+        if best_index is None:
+            break
+
+        selected_indices.append(best_index)
+
+        labels[best_index] = 1
+
+        if current_summary:
+            current_summary += " " + sentences[best_index]
+        else:
+            current_summary = sentences[best_index]
+
+        current_score = best_score
+
+    return labels
