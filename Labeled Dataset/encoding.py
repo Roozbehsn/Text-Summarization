@@ -1,5 +1,3 @@
-import torch
-import torch.nn as nn
 from transformers import AutoModel
 
 def load_bert(model_name="bert-base-uncased"):
